@@ -31,4 +31,4 @@ RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
   && install2.r --error --repo http://rforge.net PKI \
   && install2.r --error --deps TRUE bookdown rticles rmdshower
 
-RUN R -e "install.packages(c('shiny', 'rmarkdown', 'plotly', 'rhandsontable'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('shiny', 'rmarkdown', 'plotly', 'rhandsontable', 'caret'), repos='https://cloud.r-project.org/')"
