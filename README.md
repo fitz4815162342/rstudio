@@ -2,7 +2,7 @@
 RStudio for docker
 
 # run
-docker run --name rstudio --rm -d -h RStudio -e PASSWORD=password -p 8787:8787 fitz4815162342/rstudio
+docker run --name rstudio -d -h RStudio -e PASSWORD=password -p 8787:8787 fitz4815162342/rstudio
 
 If you want to share data from a persistent directory on your host into the volume of the container:
 
