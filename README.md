@@ -1,5 +1,5 @@
 # rstudio
-data science with R, Shiny and RStudio
+Data science R, shiny, RStudio
 
 # run
 docker run --name rstudio -d -h RStudio -e PASSWORD=password -p 8787:8787 fitz4815162342/rstudio
