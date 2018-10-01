@@ -31,4 +31,4 @@ RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
   && install2.r --error --repo http://rforge.net PKI \
   && install2.r --error --deps TRUE bookdown rticles rmdshower
 
-RUN R -e "install.packages(c('openxlsx', 'dummies', 'onehot', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'shiny', 'rmarkdown', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('openxlsx', 'dummies', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'shiny', 'rmarkdown', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
