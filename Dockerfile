@@ -7,7 +7,7 @@ VOLUME home/rstudio/persistent
 WORKDIR /home/rstudio/persistent
 
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-    sudo apt-utils software-properties-common pandoc pandoc-citeproc \
+    sudo apt-utils software-properties-common pandoc pandoc-citeproc libgdal-dev \
     libcurl4-gnutls-dev \
     libcairo2-dev \
     libxt-dev \
@@ -23,9 +23,9 @@ RUN apt-get update -qq && apt-get -y --no-install-recommends install \
     && R -e "source('https://bioconductor.org/biocLite.R')" && install2.r --error \
     --deps TRUE tidyverse dplyr devtools formatR remotes selectr caTools
 
-RUN apt remove -y libgdal-dev libproj-dev gdal-bin 
-RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get update && apt-get install -y libgdal-dev 
+#RUN apt remove -y libgdal-dev libproj-dev gdal-bin 
+#RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+#RUN apt-get update && apt-get install -y libgdal-dev 
 
 ENV PATH=$PATH:/opt/TinyTeX/bin/x86_64-linux/
 
@@ -49,4 +49,4 @@ RUN R -e "install.packages('rgdal')"
 RUN R -e "install.packages('sf')"
 RUN R -e "install.packages(c('devtools', 'git2r', 'packrat', 'Rcpp', 'shiny', 'shinydashboard', 'rmarkdown', 'leaflet', 'readr', 'DT', 'openxlsx'))"
 RUN R -e "devtools::install_github('tim-salabim/leaflet.glify')"
-RUN R -e "install.packages(c('mboost', 'futile.logger', 'dummies', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'rmarkdown', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('mboost', 'futile.logger', 'dummies', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
