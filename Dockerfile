@@ -51,8 +51,9 @@ RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
   && install2.r --error --repo http://rforge.net PKI \
   && install2.r --error --deps TRUE bookdown rticles rmdshower
 
+RUN R -e "install.packages(c('devtools', 'git2r', 'packrat', 'Rcpp'), repos='https://cloud.r-project.org/')"
 RUN R -e "install.packages('reticulate')"
 RUN R -e "install.packages('rgdal')"
 RUN R -e "install.packages('sf')"
-RUN R -e "install.packages(c('devtools', 'git2r', 'packrat', 'Rcpp', 'shiny', 'shinydashboard', 'rmarkdown', 'leaflet', 'readr', 'DT', 'dplyr', 'openxlsx', 'mboost', 'futile.logger', 'dummies', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('shiny', 'shinydashboard', 'rmarkdown', 'leaflet', 'readr', 'DT', 'dplyr', 'openxlsx', 'mboost', 'futile.logger', 'dummies', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest'), repos='https://cloud.r-project.org/')"
 #RUN R -e "devtools::install_github('tim-salabim/leaflet.glify')"
