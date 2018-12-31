@@ -54,6 +54,5 @@ RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
 RUN R -e "install.packages('reticulate')"
 RUN R -e "install.packages('rgdal')"
 RUN R -e "install.packages('sf')"
-RUN R -e "install.packages(c('devtools', 'git2r', 'packrat', 'Rcpp', 'shiny', 'shinydashboard', 'rmarkdown', 'leaflet', 'readr', 'DT', 'dplyr', 'openxlsx'), repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages(c('mboost', 'futile.logger', 'dummies', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('devtools', 'git2r', 'packrat', 'Rcpp', 'shiny', 'shinydashboard', 'rmarkdown', 'leaflet', 'readr', 'DT', 'dplyr', 'openxlsx', 'mboost', 'futile.logger', 'dummies', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'plotly', 'rhandsontable', 'caret', 'e1071', 'randomForest'), repos='https://cloud.r-project.org/')"
 #RUN R -e "devtools::install_github('tim-salabim/leaflet.glify')"
