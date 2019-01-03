@@ -33,4 +33,4 @@ RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
 
 RUN R -e "install.packages(c('reticulate'), repos='https://cloud.r-project.org/')"
 RUN R -e "install.packages(c('mboost', 'futile.logger', 'openxlsx', 'dummies', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'shiny', 'rmarkdown', 'plotly', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages(c('devtools', 'readr', 'leaflet', 'shinydashboard', 'DT'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('readr', 'leaflet', 'shinydashboard', 'DT'), repos='https://cloud.r-project.org/')"
