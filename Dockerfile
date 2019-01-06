@@ -66,7 +66,7 @@ RUN echo 'options(repos = c(CRAN = "'$CRAN_MIRROR'"), download.file.method = "li
 	&& echo 'RETICULATE_PYTHON = "/opt/conda/bin/python3"' >> /usr/local/lib/R/etc/Renviron
 
 
-RUN R -e "install.packages(c('leaflet', 'shiny', 'shinydashboard', 'openxlsx', 'RColorBrewer', 'rpart', 'gbm', 'plotly', 'readr'), repos='https://cloud.r-project.org/')"
+RUN R -e "install.packages(c('leaflet', 'shiny', 'shinydashboard', 'openxlsx', 'RColorBrewer', 'rpart', 'gbm', 'plotly', 'readr', 'magrittr'), repos='https://cloud.r-project.org/')"
 
 EXPOSE 8787 
 
