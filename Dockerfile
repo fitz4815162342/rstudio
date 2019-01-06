@@ -41,7 +41,7 @@ RUN conda update conda
 RUN conda update anaconda
 RUN conda update --all
 #RUN pip install --upgrade pip
-RUN pip3 install qiskit numpy scipy scikit-learn pillow h5py tensorflow keras tensorboard graphviz pydot
+RUN pip3 install qiskit numpy scipy scikit-learn pillow h5py tensorflow keras tensorboard graphviz pydot matplotlib seaborn
 
 # install R development packages and reticulate
 RUN install2.r --repos ${CRAN_MIRROR}\
