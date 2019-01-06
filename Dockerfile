@@ -6,31 +6,100 @@ VOLUME home/rstudio/persistent
 
 WORKDIR /home/rstudio/persistent
 
+ENV CRAN_MIRROR https://mran.microsoft.com/snapshot/2017-06-15
 
-RUN apt-get update -qq && apt-get -y --no-install-recommends install \
-  libxml2-dev libcairo2-dev libsqlite3-dev libmariadbd-dev \ 
-  libmariadb-client-lgpl-dev libpq-dev libssh2-1-dev unixodbc-dev \
-  && R -e "source('https://bioconductor.org/biocLite.R')" && install2.r --error \
-    --deps TRUE tidyverse dplyr devtools formatR remotes selectr caTools
+RUN apt-get update --fix-missing \
+	&& apt-get install -y \
+		ca-certificates \
+    	libglib2.0-0 \
+	 	libxext6 \
+	   	libsm6  \
+	   	libxrender1 \
+		libxml2-dev
 
-ENV PATH=$PATH:/opt/TinyTeX/bin/x86_64-linux/
+# install python3, virtualenv and anaconda
+RUN apt-get install -y \
+		python3-pip \
+		python3-dev \
+	&& pip3 install virtualenv
 
-RUN wget "https://travis-bin.yihui.name/texlive-local.deb" \
-  && dpkg -i texlive-local.deb && rm texlive-local.deb \
-  && apt-get update && apt-get install -y --no-install-recommends \
-  default-jdk fonts-roboto ghostscript libbz2-dev libicu-dev liblzma-dev \
-  libhunspell-dev libmagick++-dev librdf0-dev libv8-dev qpdf texinfo ssh nano less \
-  && apt-get clean && rm -rf /var/lib/apt/lists/ && install2.r --error tinytex \
-  && R -e "tinytex::install_tinytex(dir = '/opt/TinyTeX')" \
-  && /opt/TinyTeX/bin/*/tlmgr path add \
-  && tlmgr install metafont mfware inconsolata tex ae parskip listings \
-  && tlmgr path add && Rscript -e "tinytex::r_texmf()" \
-  && chown -R root:staff /opt/TinyTeX \
-  && chmod -R g+w /opt/TinyTeX \
-  && chmod -R g+wx /opt/TinyTeX/bin \
-  && install2.r --error --repo http://rforge.net PKI \
-  && install2.r --error --deps TRUE bookdown rticles rmdshower
+# install anaconda
+RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-2018.12-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh
 
-RUN R -e "install.packages(c('reticulate'), repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages(c('mboost', 'futile.logger', 'openxlsx', 'dummies', 'Matrix', 'RColorBrewer', 'rattle', 'rpart', 'rpart.plot', 'party', 'partykit', 'gbm', 'data.table', 'mltools', 'dict', 'shiny', 'rmarkdown', 'plotly', 'caret', 'e1071', 'randomForest', 'dplyr'), repos='https://cloud.r-project.org/')"
-RUN R -e "install.packages(c('readr', 'leaflet', 'shinydashboard', 'DT'), repos='https://cloud.r-project.org/')"
+ENV PATH /opt/conda/bin:$PATH
+
+# install R development packages and reticulate
+RUN install2.r --repos ${CRAN_MIRROR}\
+		Rcpp \
+		devtools \
+		roxygen2 \
+		knitr \
+		rmarkdown \
+		yaml \
+		reticulate \
+		ggplot2 \
+		dplyr
+
+# install tensorflow
+# create virtualenv at /tensorflow and install tensorflow as well as keras
+# To use kerasR::plot_model()
+
+RUN apt-get install -y \
+    graphviz \
+	libgraphviz-dev \
+	libpng-dev
+
+RUN mkdir /tensorflow \
+	&& virtualenv -p python3.4 --system-site-packages /tensorflow
+
+RUN . /tensorflow/bin/activate \
+	&& pip3 install --upgrade \
+		h5py \
+		pydot \
+		graphviz \
+		tensorflow \
+		tensorboard \
+		keras
+	
+# create conda env and install tensorflow as well as keras
+RUN conda create python=3.4.2 -n tensorflow
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN . activate tensorflow \
+	&& pip install \
+		h5py \
+		pydot \
+		graphviz \
+		tensorflow \
+		tensorboard \
+		keras
+
+# install R packages for tensorflow and keras
+RUN install2.r --repos ${CRAN_MIRROR}\
+		kerasR \
+		png \
+	&& R -e 'devtools::install_github("rstudio/tensorflow", ref = "v0.8.2")' # released on 2017-06-12
+
+RUN echo 'options(repos = c(CRAN = "'$CRAN_MIRROR'"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
+	&& echo 'TENSORFLOW_PYTHON = "/tensorflow/bin/python"' >> /usr/local/lib/R/etc/Renviron \
+	&& echo 'RETICULATE_PYTHON = "/tensorflow/bin/python"' >> /usr/local/lib/R/etc/Renviron
+
+# Expose port for tensorboard
+RUN mkdir /tensorboard_logs
+# Start running tensorboard when container is launched
+
+RUN echo '. /tensorflow/bin/activate' >> /init_tensorboard \
+    && echo 'tensorboard --logdir=/tensorboard_logs' >> /init_tensorboard \
+	&& chmod +x /init_tensorboard
+
+RUN R -e "install.packages(c('leaflet', 'shinydashboard'), repos='https://cloud.r-project.org/')"
+
+# ENTRYPOINT [".", "/tensorflow/bin/activate"]
+# ENTRYPOINT ["/init_tensorboard"]
+EXPOSE 6006 
+EXPOSE 8787 
+
+# Run rocker/rstudio init
+ENTRYPOINT ["/init"]
